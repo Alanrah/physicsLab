@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>force experiment</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=11" />
+	<meta http-equiv="Pragma" content="no-cache">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+
+	<script src="js/three.js"></script>
+    <script src="js/libs/ammo.js"></script>
+    <script src="js/controls/OrbitControls.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/ui.three.js"></script>
+    <script src="js/Editor.js"></script>
+    <script src="js/rightbar.js"></script>
+    <script src="js/leftbar.js"></script>
+    <script src="js/viewport.js"></script>
+    <script src="js/libs/signals.min.js"></script>
+
+</head>
+<body>
+	<script>
+
+		// 检测浏览器是否支持webgl
+	    if (!Detector.webgl) {
+	        Detector.addGetWebGLMessage();
+	        document.getElementById('viewport').innerHTML = '';
+	    }
+
+		window.URL = window.URL || window.webkitURL;
+		window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+
+		Number.prototype.format = function (){
+			return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+		};
+		
+		var editor = new Editor();
+
+		var viewport = new Viewport( editor );
+		document.body.appendChild( viewport.dom );	
+
+		 var leftbar = new Leftbar(editor);
+        document.body.appendChild( leftbar.dom );
+
+		var rightbar = new Rightbar( editor );
+		document.body.appendChild( rightbar.dom );
+
+
+	</script>
+</body>
+</html>

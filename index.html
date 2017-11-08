@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Physics Lab Index</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=11" />
+	<meta http-equiv="Pragma" content="no-cache">
+
+	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="stylesheet" href="css/swiper.min.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+
+</head>
+<body>
+
+	<br/>
+	<h1 >欢迎来到Physics Lab !!</h1>
+	<br/>
+
+	<div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><a href="voice.html"><img src="image/slide1.jpg" alt="声学实验"/></a></div>
+            <div class="swiper-slide"><a href="optics.html"><img src="image/slide2.jpg" alt="光学实验"/></a></div>
+            <div class="swiper-slide"><a href="heat.html"><img src="image/slide3.jpg" alt="热学实验"/></a></div>
+            <div class="swiper-slide"><a href="electric.html"><img src="image/slide4.jpg" alt="电学实验"/></a></div>
+            <div class="swiper-slide"><a href="force.html"><img src="image/slide5.jpg" alt="力学实验"/></a></div>
+            <div class="swiper-slide"><a href="equipment.html"><img src="image/slide6.jpg" alt="实验器材"/></a></div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+	<br/>
+
+	<div class="ad"><a href="voice.html">声学物理实验室</a></div>
+	<div class="ad"><a href="optics.html">光学物理实验室</a></div>
+	<div class="ad"><a href="heat.html">热学物理实验室</a></div>
+	<div class="ad"><a href="electric.html">电学物理实验室</a></div>
+	<div class="ad"><a href="force.html">力学物理实验室</a></div>
+	<div class="ad"><a href="equipment.html">实验器材实验室</a></div>
+
+    <script src="js/swiper.min.js"></script>
+
+    <script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        paginationClickable: true,
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: 2500,
+        autoplayDisableOnInteraction: false
+    });
+    </script>
+
+</body>
+</html>
