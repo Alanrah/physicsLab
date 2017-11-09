@@ -243,7 +243,6 @@ UI.Text = function ( text ) {
 	dom.style.cursor = 'default';
 	dom.style.display = 'inline-block';
 	dom.style.verticalAlign = 'middle';
-	dom.style.color = '#fff';
 
 	this.dom = dom;
 	this.setValue( text );

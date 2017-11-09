@@ -20,6 +20,10 @@ a{
     font-family:Georgia,"Times New Roman",Serif;
     font-size: 25px;
 }
+button{
+    color: #181818;
+    top: 5px;
+}
 a:link {color:##D1C9C9;}     
 a:visited {color:#D1C9C9;}  
 a:hover {color:#FF00FF;}    

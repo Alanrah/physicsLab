@@ -11,6 +11,7 @@ var Editor =function(){
 	this.scene = new THREE.Scene();
 	this.scene.name = 'Scene';
 	this.scene.background = new THREE.Color( 0xF5EEEE );
+	this.sceneHelpers = new THREE.Scene();
 
 	this.object = {};
 	this.geometries = {};
@@ -18,6 +19,7 @@ var Editor =function(){
 	this.textures = {};
 
 	this.selected = null;
+	this.maxNumObjectss = 100;
 
 	var Signal = signals.Signal;
 
