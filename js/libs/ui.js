@@ -1019,32 +1019,6 @@ UI.Modal.prototype.hide = function () {
 
 };
 
-
-UI.BranchDivClass = function(){
-	UI.Element.call( this );
-
-	var dom = document.createElement( 'div' );
-
-	this.dom = dom;
-
-	return this;
-}
-
-UI.BranchDivClass.prototype = Object.create( UI.Element.prototype );
-UI.BranchDivClass.prototype.constructor = UI.BranchDivClass;
-
-UI.BranchULClass = function(){
-	UI.Element.call( this );
-
-	var dom = document.createElement( 'ul' );
-
-	this.dom = dom;
-
-	return this;
-}
-UI.BranchULClass.prototype = Object.create( UI.Element.prototype );
-UI.BranchULClass.prototype.constructor = UI.branchULClass;
-
 UI.Ul = function(){
 	UI.Element.call( this );
 
@@ -1070,3 +1044,19 @@ UI.Li = function(){
 }
 UI.Li.prototype = Object.create( UI.Element.prototype );
 UI.Li.prototype.constructor = UI.Li;
+
+UI.Image = function(src){
+	UI.Element.call( this );
+
+	var dom = document.createElement( 'img' );
+	dom.src = src;
+	dom.className = 'Image';
+	dom.alt = src.split('.')[0];
+
+	this.dom = dom;
+
+	return this;
+}
+UI.Image.prototype = Object.create( UI.Element.prototype );
+UI.Image.prototype.constructor = UI.Image;
+

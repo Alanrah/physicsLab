@@ -18,6 +18,8 @@ var Editor =function(){
 	this.materials = {};
 	this.textures = {};
 
+	this.rigidBodies = [];
+
 	this.selected = null;
 	this.maxNumObjectss = 100;
 
@@ -26,6 +28,12 @@ var Editor =function(){
 	this.signals={
 		startPlayer: new Signal(),
 		stopPlayer: new Signal(),
+
+		addCard :new Signal(),
+
+		objectChanged:new Signal(),
+
+		refreshRightUI:new Signal()
 	}
 	
 }

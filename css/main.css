@@ -65,6 +65,7 @@ a:active {color:#0000FF;}
     left: 0px;
     top: 0px;
     bottom: 0;
+    overflow: auto;
     }
     #leftbar * {
         vertical-align: middle;
@@ -83,14 +84,15 @@ a:active {color:#0000FF;}
     right: 0px;
     bottom: 0px;
     background-color: #F1EFEF;
+    overflow: auto;
 }
 
-    #sidebar * {
+    #rightbar * {
         vertical-align: middle;
     }
 
-    #sidebar .Panel {
-        color: #303030;
+    #rightbar .Panel {
+        color: #F1EFEF;
         padding: 10px;
         border-top: 1px solid #222;
     }
@@ -104,3 +106,16 @@ a:active {color:#0000FF;}
     background-color: #AFAFAF;
 }
 
+.Image{
+    margin: 5px;
+    width: 90px;
+    height: 90px;
+    float: left;
+}
+.Card{
+    border: 1px solid #5C941F;
+    margin-left: 5px;
+    width: 280px;
+    color:#040404;
+    background-color: #F1EFEF;
+}

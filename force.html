@@ -45,6 +45,8 @@
 	var rightbar = new Rightbar( editor );
 	document.body.appendChild( rightbar.dom );
 
+    var signals = editor.signals;
+
     var state = true;
 
     // 全局变量
@@ -57,14 +59,14 @@
 
     // 物理引擎相关变量
     var gravityConstant = -9.8;
-    var collisionConfiguration;
-    var dispatcher;
-    var broadphase;
-    var solver;
-    var physicsWorld;
-    var rigidBodies = [];
+    var collisionConfiguration;//碰撞配置对象
+    var dispatcher;//碰撞调度器对象
+    var broadphase;//碰撞粗测阶段
+    var solver;//解算器
+    var physicsWorld;//动态世界
+    var rigidBodies = editor.rigidBodies;
     var margin = 0.05;
-    var transformAux1 = new Ammo.btTransform();
+    var transformAux1 = new Ammo.btTransform();//设置将要创建的刚体的变换矩阵
 
     //
     var time = 0;
@@ -87,7 +89,7 @@
 
         createObjects();
 
-        initInput();
+       // initInput();
     }
 
     function initGraphics() {
@@ -177,14 +179,14 @@
         // 创建地面
         pos.set(0, -0.5, 0);
         quat.set(0, 0, 0, 1);
-        var ground = createParallellepiped(40, 1, 40, 0, pos, quat, new THREE.MeshPhongMaterial({color: 0xffffff}));
+        var ground = createParallellepiped(1000, 1, 1000, 0, pos, quat, new THREE.MeshPhongMaterial({color: 0xffffff}));
         ground.castShadow = true;       // 开启投影
         ground.receiveShadow = true;    // 接受阴影(可以在表面上显示阴影)
         textureLoader.load("./textures/grid.png", function (texture) {
             // 40*40 构成网格状的地面
             texture.wrapS = THREE.RepeatWrapping;
             texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(40, 40);
+            texture.repeat.set(1000, 1000);
             ground.material.map = texture;
             ground.material.needsUpdate = texture;
         });
@@ -199,7 +201,7 @@
 
     function createParallellepiped(sx, sy, sz, mass, pos, quat, material) {
         var threeObject = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz, 1, 1, 1), material);
-        var shape = new Ammo.btBoxShape(new Ammo.btVector3(sx * 0.5, sy * 0.5, sz * 0.5));// box 的重心
+        var shape = new Ammo.btBoxShape(new Ammo.btVector3(sx * 0.5, sy * 0.5, sz * 0.5));// box 的重心，为threejsobject创建碰撞几何体
         shape.setMargin(margin);//margin 范围内的碰撞有效
 
         createRigidBody(threeObject, shape, mass, pos, quat);
@@ -219,11 +221,15 @@
 
         var localInertia = new Ammo.btVector3(0, 0, 0);
         physicsShape.calculateLocalInertia(mass, localInertia);
+        console.log(physicsShape)
 
         var rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, physicsShape, localInertia);
+        console.log(rbInfo)
         var body = new Ammo.btRigidBody(rbInfo);
+        console.log(body);
 
         threeObject.userData.physicsBody = body;
+        console.log( threeObject.userData)
 
         scene.add(threeObject);
 
@@ -239,7 +245,7 @@
 
         physicsWorld.addRigidBody(body);
 
-        return body;
+        return threeObject;
     }
 
     function animate() {
@@ -284,12 +290,14 @@
             var objThree = rigidBodies[i];
             var objPhys = objThree.userData.physicsBody;
             var ms = objPhys.getMotionState();
+
             if (ms) {
                 ms.getWorldTransform(transformAux1);
                 var p = transformAux1.getOrigin();
                 var q = transformAux1.getRotation();
                 objThree.position.set(p.x(), p.y(), p.z());
                 objThree.quaternion.set(q.x(), q.y(), q.z(), q.w());
+                editor.signals.refreshRightUI.dispatch(objThree);//刷新右边的页面数据
             }
         }
     }
@@ -320,7 +328,7 @@
             pos.copy( raycaster.ray.direction );
             pos.add( raycaster.ray.origin );
             quat.set( 0, 0, 0, 1 );
-            var ballBody = createRigidBody( ball, ballShape, ballMass, pos, quat );
+            var ballBody = createRigidBody( ball, ballShape, ballMass, pos, quat ).userData.physicsBody;
 
             pos.copy( raycaster.ray.direction );
             pos.multiplyScalar( 24 );
@@ -329,6 +337,10 @@
         }, false );
 
     }
+
+    signals.objectChanged.add(function(){
+        render();
+    })
 
 
 </script>
