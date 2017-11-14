@@ -55,9 +55,9 @@ var Rightbar = function(editor){
         // position
 
         var objectPositionRow = new UI.Row();
-        var objectPositionX = new UI.Number(object.position.x).setWidth( '50px' ).onChange( update );
-        var objectPositionY = new UI.Number(object.position.y).setWidth( '50px' ).onChange( update );
-        var objectPositionZ = new UI.Number(object.position.z).setWidth( '50px' ).onChange( update );
+        var objectPositionX = new UI.Number(object.position.x).setWidth( '50px' ).setUnit("m").onChange( update );
+        var objectPositionY = new UI.Number(object.position.y).setWidth( '50px' ).setUnit("m").onChange( update );
+        var objectPositionZ = new UI.Number(object.position.z).setWidth( '50px' ).setUnit("m").onChange( update );
 
         objectPositionRow.add( new UI.Text( 'Position' ).setWidth( '90px' ) );
         objectPositionRow.add( objectPositionX, objectPositionY, objectPositionZ );
@@ -84,6 +84,18 @@ var Rightbar = function(editor){
         objectScaleRow.add( new UI.Text( 'Scale' ).setWidth( '90px' ) );
         objectScaleRow.add( objectScaleX, objectScaleY, objectScaleZ );
         next.add( objectScaleRow );
+
+        //linear V 线速度
+        var linearVRow = new UI.Row();
+        var objectLinearVX = new UI.Number( object.userData.physicsBody.getLinearVelocity().x() ).setPrecision(3).setWidth( '50px' ).setUnit("m/s").onChange( update );
+        var objectLinearVY = new UI.Number( object.userData.physicsBody.getLinearVelocity().y() ).setPrecision(3).setWidth( '50px' ).setUnit("m/s").onChange( update );
+        var objectLinearVZ = new UI.Number( object.userData.physicsBody.getLinearVelocity().z() ).setPrecision(3).setWidth( '50px' ).setUnit("m/s").onChange( update );
+        linearVRow.add(new UI.Text("linearVelocity").setWidth( '90px' ));
+        linearVRow.add(objectLinearVX);
+        linearVRow.add(objectLinearVY);
+        linearVRow.add(objectLinearVZ);
+        next.add(linearVRow);
+
         
         container.add(card);
 
@@ -97,15 +109,21 @@ var Rightbar = function(editor){
                     object.position.x = newPosition.x;
                     object.position.y = newPosition.y;
                     object.position.z = newPosition.z;
-                    console.log(newPosition.x + object.position.x)
+                    object.__dirtyPosition = true;
+                    console.log(newPosition.x +"  "+ object.position.x)
                     var objPhys = object.userData.physicsBody;
-                    var ms = objPhys.getMotionState();
+                    
 
                     if (ms) {
-                        ms.getWorldTransform(transformAux1);
-                        transformAux1.setOrigin(newPosition);
+
+                        var transform = new Ammo.btTransform();
+                        transform.setIdentity();
+                        transform.setOrigin(new Ammo.btVector3(newPosition.x, newPosition.y, newPosition.z));
+                        //transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w));
+                        objPhys.setMotionState(transform);
+                        //ms.getWorldTransform(transformAux1);
+                        //transformAux1.setOrigin(new Ammo.btVector3(objectPositionX.getValue(), objectPositionY.getValue(), objectPositionZ.getValue()));
                     }
-                    console.log(newPosition.x + object.position.x)
 
                 }
 
@@ -128,8 +146,8 @@ var Rightbar = function(editor){
                     var ms = objPhys.getMotionState();
 
                     if (ms) {
-                        ms.getWorldTransform(transformAux1);
-                        transformAux1.setRotation(newRotation);
+                        //ms.getWorldTransform(transformAux1);
+                        //transformAux1.setRotation(new Ammo.btVector3(objectRotationX.getValue() * THREE.Math.DEG2RAD, objectRotationY.getValue() * THREE.Math.DEG2RAD, objectRotationZ.getValue() * THREE.Math.DEG2RAD));
                     }
 
                 }
@@ -140,7 +158,7 @@ var Rightbar = function(editor){
         refreshUI(object);//输入无效，无法参与改变物理世界的相关参数
     }
 
-    function refreshUI(threeobject){
+    function refreshUI(object){
 
         if(object.position){
             objectPositionX.setValue(object.position.x);
@@ -155,6 +173,10 @@ var Rightbar = function(editor){
         objectScaleX.setValue( object.scale.x );
         objectScaleY.setValue( object.scale.y );
         objectScaleZ.setValue( object.scale.z );
+
+        objectLinearVX.setValue(object.userData.physicsBody.getLinearVelocity().x());
+        objectLinearVY.setValue(object.userData.physicsBody.getLinearVelocity().y());
+        objectLinearVZ.setValue(object.userData.physicsBody.getLinearVelocity().z());
     }
     editor.signals.refreshRightUI.add(refreshUI);
  }

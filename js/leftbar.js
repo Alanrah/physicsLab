@@ -13,7 +13,7 @@ var Leftbar = function(editor){
 
     var cubeImg = new UI.Image('image/cube.png').setDraggable( "true" );//.setCursor( "move" )
     cubeImg.onClick(function(){
-    	var pos =  new THREE.Vector3(0,10,1);
+    	var pos =  new THREE.Vector3(0,100,1);
 		//pos.set(( position.x * 2 ) - 1, - ( position.y * 2 ) + 1, 0);
         var quat = new THREE.Quaternion;
     	quat.set(0, 0, 0, 1);

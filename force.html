@@ -141,6 +141,10 @@
 
         scene.add(light);
 
+        var axisHelper = new THREE.AxisHelper( 1 );
+        axisHelper.position.set(10,10,0)
+        scene.add( axisHelper );
+
         viewport.appendChild(renderer.domElement);
 
         // 显示帧数
@@ -299,6 +303,8 @@
                 objThree.quaternion.set(q.x(), q.y(), q.z(), q.w());
                 editor.signals.refreshRightUI.dispatch(objThree);//刷新右边的页面数据
             }
+            var v = objThree.userData.physicsBody.getLinearVelocity();
+           // console.log(v.x() +" " + v.y() + " " +v.z());
         }
     }
 
