@@ -48,9 +48,11 @@ var Rightbar = function(editor){
         var next = new UI.Panel().setMarginLeft('5px').setColor('#020202');
         card.add(next);
 
-        var widthRow = new UI.Row();
-        widthRow.add( new UI.Text('Width').setWidth( '90px' ));
-        //var width = new UI.Input()
+        var massRow = new UI.Row();
+        massRow.add( new UI.Text('Mass').setWidth( '90px' ));
+        var mass = new UI.Number(1).setWidth( '50px' ).setUnit("m").onChange( update );
+        massRow.add(mass);
+        next.add(massRow);
         
         // position
 
@@ -79,10 +81,8 @@ var Rightbar = function(editor){
         // scale
         var objectScaleRow = new UI.Row();
         var objectScaleX = new UI.Number( object.scale.x ).setRange( 0.01, Infinity ).setWidth( '50px' ).onChange( update );
-        var objectScaleY = new UI.Number( object.scale.y ).setRange( 0.01, Infinity ).setWidth( '50px' ).onChange( update );
-        var objectScaleZ = new UI.Number( object.scale.z ).setRange( 0.01, Infinity ).setWidth( '50px' ).onChange( update );
         objectScaleRow.add( new UI.Text( 'Scale' ).setWidth( '90px' ) );
-        objectScaleRow.add( objectScaleX, objectScaleY, objectScaleZ );
+        objectScaleRow.add( objectScaleX );
         next.add( objectScaleRow );
 
         //linear V 线速度
@@ -102,6 +102,17 @@ var Rightbar = function(editor){
         function update(){
 
             if ( object !== null){
+
+                var newMass = mass.getValue();
+                if(newMass !=1){
+
+                    var localInertia = new Ammo.btVector3(0, 0, 0);
+                    physicsWorld.removeRigidBody(object.userData.physicsBody);
+                    object.userData.physicsBody.getCollisionShape().calculateLocalInertia(newMass, localInertia);
+                    object.userData.physicsBody.setMassProps(newMass, localInertia);
+                    object.userData.physicsBody.setActivationState(4);
+                    physicsWorld.addRigidBody(object.userData.physicsBody);
+                }
 
                 var newPosition = new THREE.Vector3( objectPositionX.getValue(), objectPositionY.getValue(), objectPositionZ.getValue() );
                 if ( object.position.distanceTo( newPosition ) >= 0.01 ) {
@@ -127,14 +138,6 @@ var Rightbar = function(editor){
 
                 }
 
-                var newScale = new THREE.Vector3( objectScaleX.getValue(), objectScaleY.getValue(), objectScaleZ.getValue() );
-                if ( object.scale.distanceTo( newScale ) >= 0.01 ) {
-
-                    object.scale.x = newScale.x;
-                    object.scale.y = newScale.y;
-                    object.scale.z = newScale.y;
-                }
-
                 var newRotation = new THREE.Euler( objectRotationX.getValue() * THREE.Math.DEG2RAD, objectRotationY.getValue() * THREE.Math.DEG2RAD, objectRotationZ.getValue() * THREE.Math.DEG2RAD );
                 if ( object.rotation.toVector3().distanceTo( newRotation.toVector3() ) >= 0.01 ) {
 
@@ -151,6 +154,24 @@ var Rightbar = function(editor){
                     }
 
                 }
+
+                var newScale = objectScaleX.getValue();
+                if ( newScale  ) {
+
+                    object.scale.x = newScale;
+                    object.scale.y = newScale;
+                    object.scale.z = newScale;
+                    object.userData.physicsBody.getCollisionShape().setLocalScaling(new Ammo.btVector3(newScale,newScale,newScale));
+                }
+
+                
+                 var newLinearV = new THREE.Vector3( objectLinearVX.getValue(), objectLinearVY.getValue(), objectLinearVZ.getValue() );
+                 if(newLinearV){
+                     var objPhys = object.userData.physicsBody;
+                     objPhys.setLinearVelocity(newLinearV);
+
+                 }   
+
         }
 
         signals.objectChanged.dispatch();
@@ -171,8 +192,6 @@ var Rightbar = function(editor){
         objectRotationZ.setValue( object.rotation.z * THREE.Math.RAD2DEG );
 
         objectScaleX.setValue( object.scale.x );
-        objectScaleY.setValue( object.scale.y );
-        objectScaleZ.setValue( object.scale.z );
 
         objectLinearVX.setValue(object.userData.physicsBody.getLinearVelocity().x());
         objectLinearVY.setValue(object.userData.physicsBody.getLinearVelocity().y());
