@@ -141,8 +141,8 @@
 
         scene.add(light);
 
-        var axisHelper = new THREE.AxisHelper( 1 );
-        axisHelper.position.set(10,10,0)
+        var axisHelper = new THREE.AxisHelper( 100 );
+        axisHelper.position.set(0,0,0)
         scene.add( axisHelper );
 
         viewport.appendChild(renderer.domElement);
@@ -151,7 +151,7 @@
         stats = new Stats();
         stats.domElement.style.position = 'absolute';
         stats.domElement.style.top = 'absolute';
-        viewport.appendChild(stats.domElement);
+        //viewport.appendChild(stats.domElement);
 
         // 添加窗口大小变化监听
         window.addEventListener('resize', onWindowResize, false);
@@ -254,7 +254,7 @@
 
         render();
 
-        stats.update();
+       // stats.update();
 
     }
 
